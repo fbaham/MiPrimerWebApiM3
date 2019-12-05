@@ -1,0 +1,20 @@
+{
+    "csharp.format.enable": false,
+    "csharpfixformat.style.spaces.beforeParenthesis": false,
+    "csharpfixformat.style.braces.onSameLine": false,
+    "csharpfixformat.style.newline.elseCatch": true,
+    "todohighlight.include": [
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.html",
+        "**/*.php",
+        "**/*.css",
+        "**/*.scss",
+        "**/*.cs"
+    ],
+    "files.associations": {
+        "*.csproj": "msbuild"
+    },
+}
