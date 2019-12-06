@@ -23,14 +23,14 @@ namespace MiPrimerWebApiM3.Controllers
         [HttpGet("")]
         public ActionResult<IEnumerable<Author>> Get()
         {
-            return context.Authors.ToList();
+            return context.Authors.Include(x => x.Books).ToList();
         }
 
         // GET api/author/5
         [HttpGet("{id}", Name = "GetAutor")]
-        public ActionResult<Author> Get(int id)
+        public async Task<ActionResult<Author>> Get(int id)
         {
-            var author = context.Authors.FirstOrDefault(x => x.Id == id);
+            var author = await context.Authors.Include(x => x.Books).FirstOrDefaultAsync(x => x.Id == id);
             if (author == null)
             {
                 return NotFound();
@@ -51,11 +51,6 @@ namespace MiPrimerWebApiM3.Controllers
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Author value)
         {
-            // Esto no es necesario en asp.net core 2.1
-            // if (ModelState.IsValid){
-
-            // }
-
             if (id != value.Id)
             {
                 return BadRequest();
@@ -68,9 +63,9 @@ namespace MiPrimerWebApiM3.Controllers
 
         // DELETE api/author/5
         [HttpDelete("{id}")]
-        public ActionResult<Author> Delete(int id)
+        public async Task<ActionResult<Author>> Delete(int id)
         {
-            var author = context.Authors.FirstOrDefault(x => x.Id == id);
+            var author = await context.Authors.FirstOrDefaultAsync(x => x.Id == id);
 
             if (author == null)
             {
