@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiPrimerWebApiM3.Contexts;
+using MiPrimerWebApiM3.Models;
 using MiPrimerWebApiM3.Entities;
+using AutoMapper;
 
 namespace MiPrimerWebApiM3.Controllers
 {
@@ -14,37 +16,43 @@ namespace MiPrimerWebApiM3.Controllers
     public class AuthorController : ControllerBase
     {
         private readonly ApplicationDbContext context;
-        public AuthorController(ApplicationDbContext context)
+        private readonly IMapper mapper;
+        public AuthorController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         // GET api/author
         [HttpGet("")]
-        public ActionResult<IEnumerable<Author>> Get()
+        public async Task<ActionResult<IEnumerable<AuthorDTO>>> Get()
         {
-            return context.Authors.Include(x => x.Books).ToList();
+            var authors= await context.Authors.ToListAsync();
+            var authorsDTO = mapper.Map<List<AuthorDTO>>(authors);
+            return authorsDTO;
         }
 
         // GET api/author/5
         [HttpGet("{id}", Name = "GetAutor")]
-        public async Task<ActionResult<Author>> Get(int id)
+        public async Task<ActionResult<AuthorDTO>> Get(int id)
         {
             var author = await context.Authors.Include(x => x.Books).FirstOrDefaultAsync(x => x.Id == id);
             if (author == null)
             {
                 return NotFound();
             }
-            return author;
+            var authorDTO = mapper.Map<AuthorDTO>(author);
+            return authorDTO;
         }
 
         // POST api/author
-        [HttpPost("")]
-        public ActionResult Post([FromBody] Author author)
+        [HttpPost]
+        public async Task<ActionResult> Post([FromBody] Author author)
         {
             context.Authors.Add(author);
-            context.SaveChanges();
-            return new CreatedAtRouteResult("GetAutor", new { id = author.Id }, author);
+            await context.SaveChangesAsync();
+            var authorDTO = mapper.Map<AuthorDTO>(author);
+            return new CreatedAtRouteResult("GetAutor", new { id = author.Id }, authorDTO);
         }
 
         // PUT api/author/5

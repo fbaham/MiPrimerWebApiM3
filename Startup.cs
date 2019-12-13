@@ -13,6 +13,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using MiPrimerWebApiM3.Contexts;
+using MiPrimerWebApiM3.Entities;
+using MiPrimerWebApiM3.Models;
+using AutoMapper;
 
 namespace MiPrimerWebApiM3
 {
@@ -28,9 +31,9 @@ namespace MiPrimerWebApiM3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            // CONFIGURACION DE SQLITE IN-MEMORY
+            services.AddAutoMapper(configuration => {
+                configuration.CreateMap<Author, AuthorDTO>();
+            },typeof(Startup));
             var connection = new SqliteConnection("DataSource=MyDb.sqlite");
             connection.Open();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connection));

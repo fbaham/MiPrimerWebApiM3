@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MiPrimerWebApiM3.Helpers;
 
-namespace MiPrimerWebApiM3.Entities
+namespace MiPrimerWebApiM3.Models
 {
-    public class Author
+    public class AuthorDTO
     {
         public int Id {get; set;}
         [Required]
         [FirstLetterUppercase]
         public string Name {get; set;}
-        public string Identification {get; set;}
         public DateTime BirthDate {get; set;}
-        public List<Book> Books {get; set;}
+        public List<BookDTO> Books {get; set;}
     }
 }
