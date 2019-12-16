@@ -47,8 +47,9 @@ namespace MiPrimerWebApiM3.Controllers
 
         // POST api/author
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Author author)
+        public async Task<ActionResult> Post([FromBody] AuthorCreateDTO authorCreate)
         {
+            var author = mapper.Map<Author>(authorCreate);
             context.Authors.Add(author);
             await context.SaveChangesAsync();
             var authorDTO = mapper.Map<AuthorDTO>(author);

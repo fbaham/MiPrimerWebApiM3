@@ -33,6 +33,7 @@ namespace MiPrimerWebApiM3
         {
             services.AddAutoMapper(configuration => {
                 configuration.CreateMap<Author, AuthorDTO>();
+                configuration.CreateMap<AuthorCreateDTO, Author>();
             },typeof(Startup));
             var connection = new SqliteConnection("DataSource=MyDb.sqlite");
             connection.Open();
